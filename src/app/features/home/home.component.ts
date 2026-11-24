@@ -6,7 +6,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [NoahPageHeadingComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
 })
 export class HomeComponent {
   get portalHome(): string {
