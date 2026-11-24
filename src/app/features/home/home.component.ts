@@ -1,6 +1,6 @@
 import { NoahPageHeadingComponent } from '@dandy1103/ui';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { loadCatalog, NavCatalog, portalEntry } from '../../layout/navbar/nav-catalog';
+import { loadCatalog, loadedCatalog, NavCatalog, portalEntry } from '../../layout/navbar/nav-catalog';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +10,7 @@ import { loadCatalog, NavCatalog, portalEntry } from '../../layout/navbar/nav-ca
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  private readonly catalog = signal<NavCatalog | null>(null);
+  private readonly catalog = signal<NavCatalog | null>(loadedCatalog() ?? null);
 
   constructor() {
     const request = new AbortController();
