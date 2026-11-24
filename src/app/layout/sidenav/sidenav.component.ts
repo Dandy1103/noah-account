@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { NoahSidebarComponent, NoahSidebarSection } from '@dandy1103/ui';
-import { fallbackSide, loadCatalog, sideSections } from '../navbar/nav-catalog';
+import { loadCatalog, sideSections } from '../navbar/nav-catalog';
 
 const SELF_REPO = 'noah-account';
 
@@ -18,10 +18,10 @@ export class SidenavComponent {
     const controller = new AbortController();
     inject(DestroyRef).onDestroy(() => controller.abort());
     void loadCatalog(controller.signal).then((catalog) => {
-      const next = catalog ? sideSections(catalog, SELF_REPO) : [];
-      this.sections = (next.length ? next : fallbackSide(SELF_REPO)).map(section => ({
+      if (!catalog) return;
+      this.sections = sideSections(catalog, SELF_REPO).map((section) => ({
         ...section,
-        links: section.links.map(link => ({ ...link, exact: true })),
+        links: section.links.map((link) => ({ ...link, exact: true })),
       }));
     });
   }
