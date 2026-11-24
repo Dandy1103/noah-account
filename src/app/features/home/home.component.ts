@@ -1,5 +1,6 @@
 import { NoahPageHeadingComponent } from '@dandy1103/ui';
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { loadCatalog, NavCatalog, portalEntry } from '../../layout/navbar/nav-catalog';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,15 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  readonly portalHome = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)
-    ? 'http://localhost:4200/'
-    : 'https://noahportal.dandy-cheng.com/';
+  private readonly catalog = signal<NavCatalog | null>(null);
+
+  constructor() {
+    const request = new AbortController();
+    inject(DestroyRef).onDestroy(() => request.abort());
+    void loadCatalog(request.signal).then((value) => this.catalog.set(value));
+  }
+
+  get portalHome(): string {
+    return portalEntry(this.catalog());
+  }
 }
